@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create WordPress on Amazon Lightsail
+
+Resources:
+  WordPressServer: 
+    Type: AWS::Lightsail::Instance
+    CreationPolicy: 
+      ResourceSignal:
+        Timeout: PT5M # Specify the time here
+    Properties:
+      BlueprintId: amazon_linux_2
+      BundleId: nano_2_0
+      InstanceName: WordPressServer
+      AvailabilityZone: ap-northeast-1a
+      Networking:
+        Ports:
+          - FromPort: 443
+            ToPort: 443
+          - FromPort: 80
+            ToPort: 80
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -ex
+          yum update -y
+          source scl_source enable rh-python36
+          cfn-signal -e $? --stack ${AWS::StackName} --resource WordPressServer --region ${AWS::Region}
+
+  WordPressIp:
+    Type: AWS::Lightsail::StaticIp
+    Properties: 
+      AttachedTo: WordPressServer
+      StaticIpName: WordPressIp
+
+Outputs:
+  WordPressIp:
+    Description: WordPressIp
+    Value: !GetAtt WordPressIp.IpAddress
