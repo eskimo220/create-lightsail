@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create WordPress on Amazon Lightsail
+
+Resources:
+  WordPressServer: 
+    Type: AWS::Lightsail::Instance
+    Properties:
+      BlueprintId: amazon_linux_2
+      BundleId: nano_2_0
+      InstanceName: WordPressServer
+      AvailabilityZone: ap-northeast-1a
+      Networking:
+        Ports:
+          - FromPort: 443
+            ToPort: 443
+          - FromPort: 80
+            ToPort: 80
+
+  WordPressIp:
+    Type: AWS::Lightsail::StaticIp
+    Properties: 
+      AttachedTo: WordPressServer
+      StaticIpName: WordPressIp
+
+Outputs:
+  WordPressIp:
+    Description: WordPressIp
+    Value: !GetAtt WordPressIp.IpAddress
