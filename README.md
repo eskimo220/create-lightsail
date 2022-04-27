@@ -14,3 +14,6 @@ https://dev.classmethod.jp/articles/update-amazon-lightsail-for-cloudformation/
 
 s3://model-test/light-cfn.yml
 https://model-test.s3.ap-northeast-1.amazonaws.com/light-cfn.yml
+
+docker-compose -f docker-compose-aws.yml up
+docker run -it --rm -v $(pwd):/root/ --env-file=.env lightsail_aws-cli-container bash
