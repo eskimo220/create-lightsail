@@ -6,7 +6,7 @@ Resources:
     Type: AWS::Lightsail::Instance
     CreationPolicy: 
       ResourceSignal:
-        Timeout: PT5M # Specify the time here
+        Timeout: PT10M # Specify the time here
     Properties:
       BlueprintId: amazon_linux_2
       BundleId: nano_2_0
@@ -21,20 +21,19 @@ Resources:
           - FromPort: 22
             ToPort: 22
       UserData:
-        Fn::Base64: !Sub |
+        |
           #!/bin/bash -ex
           yum update -y
           amazon-linux-extras install -y nginx1
           systemctl start nginx
-          cfn-signal -e $? --stack ${AWS::StackName} --resource WordPressServer --region ${AWS::Region}
 
-  WordPressIp:
-    Type: AWS::Lightsail::StaticIp
-    Properties: 
-      AttachedTo: WordPressServer
-      StaticIpName: WordPressIp
+#   WordPressIp:
+#     Type: AWS::Lightsail::StaticIp
+#     Properties: 
+#       AttachedTo: WordPressServer
+#       StaticIpName: WordPressIp
 
-Outputs:
-  WordPressIp:
-    Description: WordPressIp
-    Value: !GetAtt WordPressIp.IpAddress
+# Outputs:
+#   WordPressIp:
+#     Description: WordPressIp
+#     Value: !GetAtt WordPressIp.IpAddress
