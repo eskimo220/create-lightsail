@@ -23,9 +23,10 @@ Resources:
       UserData:
         |
           #!/bin/bash -ex
-          yum update -y
-          amazon-linux-extras install -y nginx1
-          systemctl start nginx
+          yum install -y git
+          amazon-linux-extras install -y ansible2
+          git clone https://github.com/eskimo220/create-lightsail
+          ansible-playbook ./create-lightsail/playbook.yml
 
 #   WordPressIp:
 #     Type: AWS::Lightsail::StaticIp
