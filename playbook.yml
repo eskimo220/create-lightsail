@@ -1,0 +1,19 @@
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: yum update
+      yum: 
+        name: '*'
+        state: latest
+    
+    - name: install nginx
+      shell: |
+        amazon-linux-extras install -y nginx1
+
+
+    - name: Enable nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: yes
